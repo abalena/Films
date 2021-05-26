@@ -26,16 +26,18 @@ const App = () => {
         <Grid
           container
           justify="space-between"
+          direction="row-reverse"
           alignItems="stretch"
           spacing={3}
         >
-          <Grid item xs={12} sm={7}>
-            <Films />
-          </Grid>
+          
 
           <Grid item xs={12} sm={4}>
             <UploadFile />
             <Form />
+          </Grid>
+          <Grid item xs={12} sm={7}>
+            <Films />
           </Grid>
         </Grid>
     </Container>

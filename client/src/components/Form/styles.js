@@ -5,6 +5,9 @@ export default makeStyles((theme) => ({
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
     },
+    '& .MuiFormControl-root': {
+      margin: theme.spacing(1),
+    },
   },
   paper: {
     padding: theme.spacing(2),
@@ -19,6 +22,6 @@ export default makeStyles((theme) => ({
     margin: '10px 0',
   },
   buttonSubmit: {
-    marginBottom: 10,
+    marginTop: 20,
   },
 }));

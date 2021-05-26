@@ -8,8 +8,7 @@ export default makeStyles((theme) => ({
       },
       paper: {
         padding: theme.spacing(2),
-      },
-      form: {
+        marginBottom: '40px',
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
@@ -19,5 +18,8 @@ export default makeStyles((theme) => ({
       },
       label: {
           width: '97%',
+      },
+      button: {
+        marginTop: 15,
       }
 }));

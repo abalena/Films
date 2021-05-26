@@ -8,7 +8,9 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Snackbar
 } from "@material-ui/core";
+import { Alert } from '@material-ui/lab';
 import { useDispatch } from "react-redux";
 
 import useStyles from "./styles";
@@ -21,24 +23,45 @@ const Form = () => {
     format: "",
     stars: "",
   });
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
-
   const dispatch = useDispatch();
+
   const years = [];
   for (let i = 1896; i <= 2021; i++) {
     years.push(i);
   }
+
+  const formats = ["VHD", "DVD", "Blu-Ray"];
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addFilm(filmData));
-    clear();
+    dispatch(addFilm(filmData))
+      .then(() => {
+        clear();
+        setOpen(true);
+      })
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
+
   const clear = () => {
     setFilmData({ title: "", year: "", format: "", stars: "" });
   };
 
   return (
     <Paper className={classes.paper}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          Film added successfully!
+        </Alert>
+      </Snackbar>
       <form
         autoComplete="off"
         validate="true"
@@ -46,6 +69,7 @@ const Form = () => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">Add film</Typography>
+
         <TextField
           name="title"
           label="Title"
@@ -74,14 +98,27 @@ const Form = () => {
             ))}
           </Select>
         </FormControl>
-        <TextField
-          name="format"
-          label="Format"
-          fullWidth
-          value={filmData.format}
-          onChange={(e) => setFilmData({ ...filmData, format: e.target.value })}
-          required
-        />
+        <FormControl required fullWidth>
+          <InputLabel id="format-select">Format</InputLabel>
+          <Select
+            inputProps={{
+              name: "Format",
+              id: "format-select",
+            }}
+            autoWidth
+            value={filmData.format}
+            onChange={(e) => setFilmData({ ...filmData, format: e.target.value })}
+            required
+          >
+            {formats.map((format, i) => (
+              <MenuItem key={i} value={format}>
+                {format}
+              </MenuItem>
+            ))}
+
+          </Select>
+        </FormControl>
+
         <TextField
           name="stars"
           label="Stars"

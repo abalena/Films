@@ -25,7 +25,7 @@ const UploadFile = () => {
       const formData = new FormData();
       formData.append("file", selectedFile);
       dispatch(uploadFile(formData));
-    } 
+    }
   };
 
   return (
@@ -40,7 +40,7 @@ const UploadFile = () => {
         onChange={handleChange}
       />
       <label htmlFor="contained-button-file" className={classes.label}>
-        <Button variant="contained" color="primary" component="span" fullWidth>
+        <Button variant="contained" color="primary" component="span" fullWidth className={classes.button}>
           Browse
         </Button>
       </label>
@@ -56,7 +56,7 @@ const UploadFile = () => {
         )
       ) : (
         <Typography paragraph color="textPrimary" align="center">
-          Select a file to show details
+          Select a file to upload it
         </Typography>
       )}
 
@@ -67,6 +67,8 @@ const UploadFile = () => {
         component="span"
         onClick={handleSubmit}
         fullWidth
+        className={classes.button}
+        disabled={!isSelected || (selectedFile.type !== "text/plain")}
       >
         Upload
       </Button>

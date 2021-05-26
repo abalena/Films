@@ -6,6 +6,7 @@ import {
   IconButton,
   TextField,
   Radio,
+  Typography
 } from "@material-ui/core";
 import SortIcon from "@material-ui/icons/Sort";
 import SearchIcon from "@material-ui/icons/Search";
@@ -18,7 +19,7 @@ const Films = () => {
   const [filteredFilms, setFilteredFilms] = useState([]);
   const [isSorted, setIsSorted] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
-  const [searchValue, setSearchValue] = useState();
+  const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState("title");
   const classes = useStyles();
 
@@ -59,7 +60,7 @@ const Films = () => {
   };
 
   return !films.length ? (
-    <CircularProgress />
+    <Typography variant="h4" gutterBottom>There are no films in this list ... </Typography>
   ) : (
     <>
       <Grid
@@ -96,6 +97,7 @@ const Films = () => {
               id="standard-basic"
               label={`Search by ${searchBy}`}
               onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={filter}
             />
             <IconButton
               color="primary"
@@ -108,16 +110,25 @@ const Films = () => {
           </Grid>
         </Grid>
         {isSearched
-          ? filteredFilms.map((film) => (
-              <Grid key={film._id} item xs={12} sm={12}>
-                <Film film={film} />
-              </Grid>
-            ))
+          ? (filteredFilms.length ? filteredFilms.map((film) => (
+            <Grid key={film._id} item xs={12} sm={12}>
+              <Film film={film} />
+            </Grid>
+          )) :
+            <div>
+              <Typography variant="h4" gutterBottom>
+                No results
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                Search for other keywords
+              </Typography>
+            </div>)
+
           : films.map((film) => (
-              <Grid key={film._id} item xs={12} sm={12}>
-                <Film film={film} />
-              </Grid>
-            ))}
+            <Grid key={film._id} item xs={12} sm={12}>
+              <Film film={film} />
+            </Grid>
+          ))}
       </Grid>
     </>
   );
