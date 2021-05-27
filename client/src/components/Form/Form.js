@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   TextField,
   Button,
@@ -17,6 +18,7 @@ import useStyles from "./styles";
 import { addFilm } from "../../actions/films";
 
 const Form = () => {
+  const films = useSelector((state) => state.films);
   const [filmData, setFilmData] = useState({
     title: "",
     year: "",
@@ -24,6 +26,7 @@ const Form = () => {
     stars: "",
   });
   const [open, setOpen] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -34,13 +37,26 @@ const Form = () => {
 
   const formats = ["VHD", "DVD", "Blu-Ray"];
 
+  const validate = () => {
+    const existedFilms = films.filter((film) =>
+      film.title == filmData.title && film.year == filmData.year
+    )
+    return existedFilms.length;
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addFilm(filmData))
-      .then(() => {
-        clear();
-        setOpen(true);
-      })
+    if (validate() == 0) {
+      setIsAdded(false);
+      dispatch(addFilm(filmData))
+        .then(() => {
+          clear();
+          setOpen(true);
+
+        })
+    } else {
+      setIsAdded(true);
+    }
   }
 
   const handleClose = (event, reason) => {
@@ -68,6 +84,7 @@ const Form = () => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">Add film</Typography>
+        {isAdded ? <Typography variant="subtitle1" color="error">Film has been added</Typography> : <></>}
 
         <TextField
           name="title"
