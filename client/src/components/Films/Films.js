@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Grid,
-  CircularProgress,
   IconButton,
   TextField,
   Radio,
@@ -19,22 +18,22 @@ const Films = () => {
   const [filteredFilms, setFilteredFilms] = useState([]);
   const [isSorted, setIsSorted] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState("title");
   const classes = useStyles();
 
-  const filter = () => {
-    if (searchValue) {
+  const filter = (e) => {
+    const value = e.target.value
+    if (value) {
       const newFilms = films.filter((film) => {
         const title = film.title.toLowerCase();
         const star = film.stars.toLowerCase();
-        const filter = searchValue.toLowerCase();
+        const filter = value.toLowerCase();
         const searchResultTitle = title.includes(filter);
         const searchResultStar = star.includes(filter);
         return searchBy === "title" ? searchResultTitle : searchResultStar;
       });
       setFilteredFilms(newFilms);
-      searchValue ? setIsSearched(true) : setIsSearched(false);
+      value ? setIsSearched(true) : setIsSearched(false);
     } else {
       setIsSearched(false);
       return films;
@@ -46,12 +45,12 @@ const Films = () => {
       films.sort((a, b) =>
         a.title > b.title ? 1 : b.title > a.title ? -1 : 0
       );
-      setIsSorted(true);
+      setIsSorted(!isSorted);
     } else if (isSearched) {
       filteredFilms.sort((a, b) =>
         a.title > b.title ? 1 : b.title > a.title ? -1 : 0
       );
-      setIsSorted(true);
+      setIsSorted(!isSorted);
     }
   };
 
@@ -96,7 +95,7 @@ const Films = () => {
             <TextField
               id="standard-basic"
               label={`Search by ${searchBy}`}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={filter}
               onKeyDown={filter}
             />
             <IconButton

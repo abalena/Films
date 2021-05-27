@@ -47,7 +47,6 @@ const Form = () => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 
